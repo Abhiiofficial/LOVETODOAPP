@@ -56,6 +56,10 @@ const verifyToken = async (req, res, next) => {
     }
 };
 
+router.get('/',(req,res)=>{
+    res.json("hey, its me abhishek")
+})
+
 //API TO SIGNUP A USER
 router.post('/signup', async (req, res, next) => {
     const username = req.body.username;
