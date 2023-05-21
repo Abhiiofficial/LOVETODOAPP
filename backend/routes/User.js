@@ -56,7 +56,7 @@ const verifyToken = async (req, res, next) => {
     }
 };
 
-router.get('/',(req,res)=>{
+router.get('/hey',(req,res)=>{
     res.json("hey, its me abhishek")
 })
 
