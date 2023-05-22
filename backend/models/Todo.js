@@ -18,12 +18,12 @@ TodoSchema.set('toJSON', {
 
     ret.createdAt = {
       date: createdAt.format('DD/MM/YYYY , HH:mm'),
-      ago: createdAgo.replace('minutes', 'min').replace('seconds', 's')
+      ago: createdAgo.replace('minutes', 'min').replace('seconds', 'sec')
     };
 
     ret.updatedAt = {
       date: updatedAt.format('DD/MM/YYYY , HH:mm'),
-      ago: updatedAgo.replace('minutes', 'min').replace('seconds', 's')
+      ago: updatedAgo.replace('minutes', 'min').replace('seconds', 'sec')
     };
 
     return ret;

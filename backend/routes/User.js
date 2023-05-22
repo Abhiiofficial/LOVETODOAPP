@@ -194,7 +194,7 @@ router.post('/createTodo', verifyToken, async (req, res) => {
 //API TO GET TODOS
 router.get('/getTodos', verifyToken, async (req, res) => {
     try {
-        const todos = await Todo.find({ createdBy: req.userId })
+        const todos = await Todo.find({ createdBy: req.userId }).sort({ createdAt: -1 })
         console.log(todos)
         if (!todos) {
             res.status(404).json({
@@ -209,7 +209,7 @@ router.get('/getTodos', verifyToken, async (req, res) => {
 
         return res.status(200).json({
             statusCode: 200,
-            count:todoCount,
+            count: todoCount,
             accessToken: req.accessToken,
             status: "SUCCESS",
             data: todos
