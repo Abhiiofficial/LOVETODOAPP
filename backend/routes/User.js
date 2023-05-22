@@ -56,7 +56,7 @@ const verifyToken = async (req, res, next) => {
     }
 };
 
-router.get('/hey',(req,res)=>{
+router.get('/hey', (req, res) => {
     res.json("hey, its me abhishek")
 })
 
@@ -204,11 +204,12 @@ router.get('/getTodos', verifyToken, async (req, res) => {
             });
 
         }
-
+        let todoCount = await todos.length
         res.cookie("AccessToken", req.accessToken, { httpOnly: true, maxAge: 60000 * 5 }); // Set the expiration time to 1 hour
 
         return res.status(200).json({
             statusCode: 200,
+            count:todoCount,
             accessToken: req.accessToken,
             status: "SUCCESS",
             data: todos
