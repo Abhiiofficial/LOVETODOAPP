@@ -331,7 +331,7 @@ router.get('/getActiveTodo', verifyToken, async (req, res) => {
                 })
             }
         } else if (isCompleted === 'false') {
-            const todos = await Todo.find({ createdBy: req.userId, isCompleted: false });
+            const todos = await Todo.find({ createdBy: req.userId, isCompleted: false })
             if (todos?.length !== 0) {
                 return res.status(200).json({
                     statusCode: 200,
@@ -408,7 +408,7 @@ router.delete('/deleteAll', verifyToken, async (req, res) => {
                 statusCode: 200,
                 accessToken: req.accessToken,
                 status: "SUCCESS",
-                message: 'deleted successfully'
+                message: `${todos?.length} deleted successfully`
             })
         } else {
             return res.status(200).json({
