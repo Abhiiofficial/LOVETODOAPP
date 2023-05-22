@@ -130,7 +130,7 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({
                 statusCode: 401,
                 status: "FAILURE",
-                message: 'Authentication failed'
+                message: 'Invalid credential'
             });
         }
 
@@ -158,6 +158,14 @@ router.post('/login', async (req, res) => {
 
 //API CREATE A NEW TODO
 router.post('/createTodo', verifyToken, async (req, res) => {
+    const { todoTitle } = req.body
+    if (validator.isEmpty(todoTitle) || validator.matches(todoTitle, /[\s.<>{}\[\]\/]/)) {
+        return res.status(400).json({
+            status: 'FAILURE',
+            error: 'Invalid Todo Title'
+        });
+    }
+
     try {
         const { todoTitle } = req.body
         const todo = new Todo({
