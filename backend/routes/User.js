@@ -161,6 +161,7 @@ router.post('/createTodo', verifyToken, async (req, res) => {
     const { todoTitle } = req.body
     if (validator.isEmpty(todoTitle) || validator.matches(todoTitle, /[\s.<>{}\[\]\/]/)) {
         return res.status(400).json({
+            statusCode:400,
             status: 'FAILURE',
             error: 'Invalid Todo Title'
         });
