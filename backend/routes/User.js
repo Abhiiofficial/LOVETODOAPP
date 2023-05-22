@@ -197,7 +197,7 @@ router.get('/getTodos', verifyToken, async (req, res) => {
         const todos = await Todo.find({ createdBy: req.userId }).sort({ createdAt: -1 })
         console.log(todos)
         let todoCount = await todos.length
-        let coTodo = await Todo.find({createdBy:req.userId,isCompleted:true})
+        let coTodo = await Todo.find({ createdBy: req.userId, isCompleted: true })
         if (!todos) {
             res.status(404).json({
                 statusCode: 403,
@@ -211,7 +211,7 @@ router.get('/getTodos', verifyToken, async (req, res) => {
         return res.status(200).json({
             statusCode: 200,
             count: todoCount,
-            doneCount:coTodo.length,
+            doneCount: coTodo.length,
             accessToken: req.accessToken,
             status: "SUCCESS",
             data: todos
@@ -302,6 +302,105 @@ router.delete('/delete/:todoId', verifyToken, async (req, res) => {
     }
 })
 
-//
+//API TO GET FILTER
+router.get('/getActiveTodo', verifyToken, async (req, res) => {
+    try {
+        const { isCompleted } = req.query;
+        // const filter = {};
+
+        if (isCompleted === 'true') {
+            const todos = await Todo.find({ createdBy: req.userId, isCompleted: true });
+            return res.status(200).json({
+                statusCode: 200,
+                accessToken: req.accessToken,
+                status: "SUCCESS",
+                data: todos,
+                count: todos?.length,
+                doneCount: todos?.length
+            })
+        } else if (isCompleted === 'false') {
+            const todos = await Todo.find({ createdBy: req.userId, isCompleted: false });
+            return res.status(200).json({
+                statusCode: 200,
+                accessToken: req.accessToken,
+                status: "SUCCESS",
+                data: todos,
+                count: todos?.length,
+                doneCount: 0
+            })
+        } else {
+            return res.status(404).json({
+                statusCode: 404,
+                status: "FAILURE",
+                message: 'Invalid request'
+            });
+        }
+
+    } catch (error) {
+        return res.status(404).json({
+            statusCode: 404,
+            status: "FAILURE",
+            message: 'Not Found'
+        });
+    }
+})
+
+//API TO DELETE COMPLETED
+router.delete('/deleteCompleted', verifyToken, async (req, res) => {
+    try {
+        const todos = await Todo.find({ createdBy: req.userId, isCompleted: true })
+        if (todos?.length !== 0) {
+            await Todo.deleteMany({ createdBy: req.userId, isCompleted: true })
+            return res.status(200).json({
+                statusCode: 200,
+                accessToken: req.accessToken,
+                status: "SUCCESS",
+                message: `${todos?.length} todos deleted successfully`
+            })
+        } else {
+            return res.status(200).json({
+                statusCode: 200,
+                accessToken: req.accessToken,
+                status: "SUCCESS",
+                message: 'Nothing to delete.'
+            })
+        }
+    } catch (error) {
+        return res.status(404).json({
+            statusCode: 404,
+            status: "FAILURE",
+            message: 'Not Found'
+        });
+    }
+})
+
+//API TO DELETE MANY
+router.delete('/deleteAll', verifyToken, async (req, res) => {
+    try {
+        const todos = await Todo.find({ createdBy: req.userId })
+        console.log(todos)
+        if (todos?.length !== 0) {
+            await Todo.deleteMany({ createdBy: req.userId })
+            return res.status(200).json({
+                statusCode: 200,
+                accessToken: req.accessToken,
+                status: "SUCCESS",
+                message: 'deleted successfully' 
+            })
+        }else{
+            return res.status(200).json({
+                statusCode: 200,
+                status: "SUCCESS",
+                message:'Nothing to delete.'
+            })
+        }
+    } catch (error) {
+        return res.status(404).json({
+            statusCode: 404,
+            status: "FAILURE",
+            message: 'Not Found'
+        });
+    }
+})
 
 module.exports = router
