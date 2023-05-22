@@ -196,6 +196,8 @@ router.get('/getTodos', verifyToken, async (req, res) => {
     try {
         const todos = await Todo.find({ createdBy: req.userId }).sort({ createdAt: -1 })
         console.log(todos)
+        let todoCount = await todos.length
+        let coTodo = await Todo.find({createdBy:req.userId,isCompleted:true})
         if (!todos) {
             res.status(404).json({
                 statusCode: 403,
@@ -204,7 +206,6 @@ router.get('/getTodos', verifyToken, async (req, res) => {
             });
 
         }
-        let todoCount = await todos.length
         res.cookie("AccessToken", req.accessToken, { httpOnly: true, maxAge: 60000 * 5 }); // Set the expiration time to 1 hour
 
         return res.status(200).json({
