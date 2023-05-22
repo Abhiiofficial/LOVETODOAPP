@@ -6,6 +6,9 @@ const session = require('cookie-session')
 const cors = require('cors')
 
 const app = express()
+app.use(cors({
+    origin: 'http://localhost:5173'
+  }));
 app.use(express.json());
 app.use('/api/v1/user', userRoute)
 app.use(bodyParser.json());
@@ -14,7 +17,6 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
 }));
-app.use(cors())
 
 const connect = () => {
     mongoose
