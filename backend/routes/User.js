@@ -65,14 +65,14 @@ router.post('/signup', async (req, res, next) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    if (validator.isEmpty(username) || validator.matches(username, /[\s.<>{}\[\]\/]/)) {
+    if (validator.isEmpty(username) || validator.matches(username, /[./\[\]{}<>]/)) {
         return res.status(400).json({
             status: 'FAILURE',
             error: 'Invalid username'
         });
     }
 
-    if (validator.isEmpty(password) || validator.matches(password, /[\s.<>{}\[\]\/]/)) {
+    if (validator.isEmpty(password) || validator.matches(password, /[./\[\]{}<>]/)) {
         return res.status(400).json({
             status: 'FAILURE',
             error: 'Invalid username'
@@ -161,7 +161,7 @@ router.post('/createTodo', verifyToken, async (req, res) => {
     const { todoTitle } = req.body
     if (validator.isEmpty(todoTitle) || validator.matches(todoTitle, /[./\[\]{}<>]/)) {
         return res.status(400).json({
-            statusCode:400,
+            statusCode: 400,
             status: 'FAILURE',
             error: 'Invalid Todo Title'
         });
@@ -308,27 +308,49 @@ router.get('/getActiveTodo', verifyToken, async (req, res) => {
     try {
         const { isCompleted } = req.query;
         // const filter = {};
-
+        const allTodos = await Todo.find({ createdBy: req.userId });
         if (isCompleted === 'true') {
             const todos = await Todo.find({ createdBy: req.userId, isCompleted: true });
-            return res.status(200).json({
-                statusCode: 200,
-                accessToken: req.accessToken,
-                status: "SUCCESS",
-                data: todos,
-                count: todos?.length,
-                doneCount: todos?.length
-            })
+            if (todos?.length !== 0) {
+                return res.status(200).json({
+                    statusCode: 200,
+                    accessToken: req.accessToken,
+                    status: "SUCCESS",
+                    data: todos,
+                    count: todos?.length,
+                    doneCount: todos?.length
+                })
+            } else {
+                return res.status(200).json({
+                    statusCode: 200,
+                    accessToken: req.accessToken,
+                    status: "SUCCESS",
+                    data: allTodos,
+                    count: allTodos?.length,
+                    doneCount: todos?.length
+                })
+            }
         } else if (isCompleted === 'false') {
             const todos = await Todo.find({ createdBy: req.userId, isCompleted: false });
-            return res.status(200).json({
-                statusCode: 200,
-                accessToken: req.accessToken,
-                status: "SUCCESS",
-                data: todos,
-                count: todos?.length,
-                doneCount: 0
-            })
+            if (todos?.length !== 0) {
+                return res.status(200).json({
+                    statusCode: 200,
+                    accessToken: req.accessToken,
+                    status: "SUCCESS",
+                    data: todos,
+                    count: todos?.length,
+                    doneCount: 0
+                })
+            }else{
+                return res.status(200).json({
+                    statusCode: 200,
+                    accessToken: req.accessToken,
+                    status: "SUCCESS",
+                    data: allTodos,
+                    count: allTodos?.length,
+                    doneCount: 0
+                })
+            }
         } else {
             return res.status(404).json({
                 statusCode: 404,
@@ -386,13 +408,13 @@ router.delete('/deleteAll', verifyToken, async (req, res) => {
                 statusCode: 200,
                 accessToken: req.accessToken,
                 status: "SUCCESS",
-                message: 'deleted successfully' 
+                message: 'deleted successfully'
             })
-        }else{
+        } else {
             return res.status(200).json({
                 statusCode: 200,
                 status: "SUCCESS",
-                message:'Nothing to delete.'
+                message: 'Nothing to delete.'
             })
         }
     } catch (error) {
