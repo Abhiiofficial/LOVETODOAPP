@@ -6,9 +6,13 @@ const session = require('cookie-session')
 const cors = require('cors')
 
 const app = express()
-app.use(cors({
-    origin: 'https://todo-ai6z.vercel.app/'
-  }));
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "https://sparkzccet.tech");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+app.use(cors())
+app.use(bodyParser.json())
 app.use(express.json());
 app.use('/api/v1/user', userRoute)
 app.use(bodyParser.json());
