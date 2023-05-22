@@ -144,7 +144,7 @@ router.post('/login', async (req, res) => {
             status: "SUCCESS",
             accessToken: token,
             data: userData,
-            message: 'Authentication successful'
+            message: `Welcome ${username}`
         });
     } catch (error) {
         console.log(error)
