@@ -211,6 +211,7 @@ router.get('/getTodos', verifyToken, async (req, res) => {
         return res.status(200).json({
             statusCode: 200,
             count: todoCount,
+            doneCount:coTodo,
             accessToken: req.accessToken,
             status: "SUCCESS",
             data: todos
