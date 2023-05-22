@@ -6,11 +6,12 @@ const session = require('cookie-session')
 const cors = require('cors')
 
 const app = express()
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "https://sparkzccet.tech");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://todo-ai6z.vercel.app');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     next();
-});
+  });
 app.use(cors())
 app.use(bodyParser.json())
 app.use(express.json());
