@@ -159,7 +159,7 @@ router.post('/login', async (req, res) => {
 //API CREATE A NEW TODO
 router.post('/createTodo', verifyToken, async (req, res) => {
     const { todoTitle } = req.body
-    if (validator.isEmpty(todoTitle) || validator.matches(todoTitle, /[\s.<>{}\[\]\/]/)) {
+    if (validator.isEmpty(todoTitle) || validator.matches(todoTitle, /[./\[\]{}<>]/)) {
         return res.status(400).json({
             statusCode:400,
             status: 'FAILURE',
