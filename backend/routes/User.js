@@ -325,8 +325,8 @@ router.get('/getActiveTodo', verifyToken, async (req, res) => {
                     statusCode: 200,
                     accessToken: req.accessToken,
                     status: "SUCCESS",
-                    data: allTodos,
-                    count: allTodos?.length,
+                    data: todos,
+                    count: todos?.length,
                     doneCount: todos?.length
                 })
             }
@@ -341,14 +341,14 @@ router.get('/getActiveTodo', verifyToken, async (req, res) => {
                     count: todos?.length,
                     doneCount: 0
                 })
-            }else{
+            } else {
                 return res.status(200).json({
                     statusCode: 200,
                     accessToken: req.accessToken,
                     status: "SUCCESS",
-                    data: allTodos,
-                    count: allTodos?.length,
-                    doneCount: 0
+                    data: todos,
+                    count: todos?.length,
+                    doneCount: todos?.length
                 })
             }
         } else {
