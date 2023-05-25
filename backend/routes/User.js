@@ -159,6 +159,14 @@ router.post('/login', async (req, res) => {
 //API CREATE A NEW TODO
 router.post('/createTodo', verifyToken, async (req, res) => {
     const { todoTitle } = req.body
+    if (todoTitle.trim() === '') {
+        console.log('Input cannot be empty.');
+        return res.status(400).json({
+            statusCode: 400,
+            status: 'FAILURE',
+            error: 'Todo Title Cannot be empty!'
+        });
+      }
     if (validator.isEmpty(todoTitle) || validator.matches(todoTitle, /[./\[\]{}<>]/)) {
         return res.status(400).json({
             statusCode: 400,
